@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#f4efe5">
+  <title>史流 · 学考历史复习</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="paper-noise" aria-hidden="true"></div>
+
+  <header class="site-header">
+    <a class="brand" href="#" aria-label="返回首页">
+      <span class="brand-seal">史</span>
+      <span>
+        <strong>史流</strong>
+        <small>学考历史复习</small>
+      </span>
+    </a>
+
+    <nav class="mode-switch" aria-label="复习模式">
+      <button class="mode-button active" data-mode="timeline">
+        <span>01</span> 同轴时间线
+      </button>
+      <button class="mode-button" data-mode="topics">
+        <span>02</span> 专题板块
+      </button>
+      <button class="mode-button" data-mode="profile">
+        <span>03</span> 我的
+      </button>
+    </nav>
+
+    <div class="header-progress" title="已掌握事件">
+      <span class="progress-ring" id="progressRing"><b id="progressPercent">0%</b></span>
+      <span>复习进度</span>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="hero-copy">
+        <p class="kicker">普通高中教科书 · 中外历史纲要（上、下）</p>
+        <h1>把散落的史实，<br><em>连成一条河。</em></h1>
+        <p class="hero-intro">在同一坐标中对照中国与世界，也可以跳出年代，沿专题理解历史发展的因果与脉络。</p>
+      </div>
+
+      <div class="today-card">
+        <div class="today-mark">今日建议</div>
+        <p id="studySuggestion">先浏览一个时期，再选择一个专题交叉复习。</p>
+        <button id="randomEventButton">随机抽取一个事件 <span>→</span></button>
+      </div>
+    </section>
+
+    <section class="toolbar" aria-label="筛选工具">
+      <label class="search-box">
+        <span aria-hidden="true">⌕</span>
+        <input id="searchInput" type="search" placeholder="搜索事件、人物、制度或关键词">
+        <kbd>⌘ K</kbd>
+      </label>
+
+      <div class="filter-group" id="periodFilters" aria-label="时期筛选">
+        <button class="filter-chip active" data-period="all">全时段</button>
+        <button class="filter-chip" data-period="ancient">古代</button>
+        <button class="filter-chip" data-period="modern">近代</button>
+        <button class="filter-chip" data-period="contemporary">现代</button>
+      </div>
+
+      <div class="legend">
+        <span><i class="dot china"></i>中国历史</span>
+        <span><i class="dot world"></i>外国历史</span>
+      </div>
+    </section>
+
+    <section id="timelineView" class="view active" aria-labelledby="timelineTitle">
+      <div class="section-heading">
+        <div>
+          <p class="section-index">MODE 01</p>
+          <h2 id="timelineTitle">中外历史同轴对照</h2>
+          <p>按时间先后排列。拖动或横向滚动，在同一年份附近观察中国与世界的呼应。</p>
+        </div>
+        <div class="timeline-controls">
+          <button id="zoomOut" title="缩小时间轴">−</button>
+          <span id="zoomLabel">100%</span>
+          <button id="zoomIn" title="放大时间轴">＋</button>
+          <button id="jumpToday" class="text-button">跳至现代</button>
+        </div>
+      </div>
+
+      <div class="timeline-shell">
+        <div class="timeline-side-labels" aria-hidden="true">
+          <span class="china-label">中国</span>
+          <span class="axis-label">时间</span>
+          <span class="world-label">世界</span>
+        </div>
+        <div class="timeline-scroll" id="timelineScroll" tabindex="0">
+          <div class="timeline-canvas" id="timelineCanvas"></div>
+        </div>
+      </div>
+      <p class="empty-state" id="timelineEmpty" hidden>没有找到匹配的历史事件，换个关键词试试。</p>
+    </section>
+
+    <section id="topicsView" class="view" aria-labelledby="topicsTitle">
+      <div class="section-heading">
+        <div>
+          <p class="section-index">MODE 02</p>
+          <h2 id="topicsTitle">专题脉络复习</h2>
+          <p>把跨时代、跨区域的知识重新组合，重点理解背景、过程、影响与历史趋势。</p>
+        </div>
+        <span class="topic-count" id="topicCount"></span>
+      </div>
+
+      <div class="topics-layout">
+        <aside class="topic-nav" id="topicNav" aria-label="专题列表"></aside>
+        <article class="topic-detail" id="topicDetail"></article>
+      </div>
+    </section>
+
+    <section id="profileView" class="view" aria-labelledby="profileTitle">
+      <div class="section-heading">
+        <div>
+          <p class="section-index">MODE 03</p>
+          <h2 id="profileTitle">我的复习数据</h2>
+          <p>查看自己的学习足迹和知识分布，找到下一轮复习最值得投入的方向。</p>
+        </div>
+        <button class="profile-reset" id="resetProgressButton">清空复习数据</button>
+      </div>
+
+      <div id="profileDashboard" class="profile-dashboard"></div>
+    </section>
+  </main>
+
+  <footer>
+    <p>内容依据《普通高中教科书 历史 必修 中外历史纲要（上、下）》整理</p>
+    <p>掌握标记仅保存在当前浏览器中</p>
+  </footer>
+
+  <dialog id="eventDialog" class="event-dialog">
+    <button class="dialog-close" id="dialogClose" aria-label="关闭">×</button>
+    <div id="dialogContent"></div>
+  </dialog>
+
+  <script src="details.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
